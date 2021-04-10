@@ -95,5 +95,7 @@ public class DAOFactory {
     /* Méthodes de récupération de l'implémentation des différents DAO */
     public UserDao getUserDao() {return new UserDaoImpl(this);}
     public CosmeticDao getCosmeticDao() {return new CosmeticDaoImpl(this);}
+    public MazeDao getMazeDao() {return new MazeDaoImpl(this);}
     public PurchaseDao getPurchaseDao() {return new PurchaseDaoImpl(this);}
+    public GameDao getGameDao() {return new GameDaoImpl(this);}
 }

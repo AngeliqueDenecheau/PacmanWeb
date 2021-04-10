@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import beans.User;
+import dao.CosmeticDao;
 import dao.UserDao;
 
 public class UpdateForm {
@@ -63,6 +64,7 @@ public class UpdateForm {
 		    /* Il faut déterminer s'il s'agit d'un champ classique ou d'un champ de type fichier : on délègue cette opération  à la méthode utilitaire getNomFichier() */
 		    nomFichier = getNomFichier(part);
 
+		    System.out.println("nom fichier : " + nomFichier); 
 		    /* Si la méthode a renvoyé quelque chose, il s'agit donc d'un champ de type fichier (input type="file") */
 		    if(nomFichier != null && !nomFichier.isEmpty()) {
 		    	
@@ -116,8 +118,9 @@ public class UpdateForm {
         }
 		
         userDao.update(user);
-        
-		return user;
+		if(password != null && !password.isBlank()) userDao.updatePassword(user);
+			
+		return userDao.find_by_id(user.getUser_id());
 	}
     
     /* Méthode utilitaire qui retourne null si un champ est vide, et son contenu sinon */
@@ -159,28 +162,21 @@ public class UpdateForm {
 	
 	public void traiterPassword(String password, String confirm_password, User user) {
 		try {
-			password = validationPassword(password, confirm_password);
+			validationPassword(password, confirm_password);
 		} catch (FormValidationException e) {
 			erreur = e.getMessage();
 		} catch (NoSuchAlgorithmException e) {
 			erreur = e.getMessage();
 		}
 		if(erreur == null) user.setPassword(password);
-		System.out.println(user.getPassword());
 	}
     
-    public String validationPassword(String password, String confirm_password) throws FormValidationException, NoSuchAlgorithmException {
+    public void validationPassword(String password, String confirm_password) throws FormValidationException, NoSuchAlgorithmException {
     	if(password.length() < 8 || password.length() > 20) throw new FormValidationException("Votre mot de passe doit être compris entre 8 et 20 caractères !");
     	Pattern pattern = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(password);
         if(!matcher.find()) throw new FormValidationException("Votre mot de passe doit contenir au minimum un chiffre, une lettre et un caractère spécial !");
     	if(!password.equals(confirm_password)) throw new FormValidationException("Vos mots de passe ne correspondent pas !");
-
-		MessageDigest md = MessageDigest.getInstance("MD5");
-	    md.update(password.getBytes());
-	    byte[] digest = md.digest();
-	    String myHash = new String(digest, StandardCharsets.UTF_8);
-	    return myHash;
     }
 	
     /* Méthode utilitaire qui a pour unique but d'analyser l'en-tête "content-disposition", et de vérifier si le paramètre "filename" y est présent. Si oui, alors le champ traité est de type File et la méthode retourne son nom, sinon il s'agit d'un champ de formulaire classique et la méthode retourne null */

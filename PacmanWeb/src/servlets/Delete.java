@@ -19,9 +19,12 @@ import dao.UserDao;
 @WebServlet("/delete")
 public class Delete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String VUE_HOME = "/WEB-INF/home.jsp";
-	public static final String VUE_CONNECTION = "/WEB-INF/connection.jsp";
-	public static final String VUE_COMPTE = "/WEB-INF/restricted/compte.jsp";
+	//public static final String VUE_HOME = "/WEB-INF/home.jsp";
+	public static final String VUE_HOME = "/home";
+	//public static final String VUE_CONNECTION = "/WEB-INF/connection.jsp";
+	public static final String VUE_CONNECTION = "/connection";
+	//public static final String VUE_COMPTE = "/WEB-INF/restricted/compte.jsp";
+	public static final String VUE_COMPTE = "/compte";
 	public static final String ATTR_TYPE = "type";
 	public static final String ATTR_SUCCES = "succes";
 	public static final String ATTR_ERREUR = "erreur";
@@ -57,16 +60,21 @@ public class Delete extends HttpServlet {
 			   	chemin = chemin.substring(0, chemin.indexOf("/.") + 1) + "images/";
 				File file = new File(chemin + user.getImage());
 				file.delete();
-				
-				request.setAttribute(ATTR_SUCCES, "Compte supprimé avec succès !");
-				this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+
+				//request.setAttribute(ATTR_SUCCES, "Compte supprimé avec succès !");
+				session.setAttribute(ATTR_SUCCES, "Compte supprimé avec succès !");
+				//this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+				response.sendRedirect(request.getContextPath());
 			}else {
-				request.setAttribute(ATTR_ERREUR, "Un problème inattendu est survenu lors de la suppression du compte, veuillez réessayer ultérieurement.");
-				this.getServletContext().getRequestDispatcher(VUE_COMPTE).forward(request, response);
+				//request.setAttribute(ATTR_ERREUR, "Un problème inattendu est survenu lors de la suppression du compte, veuillez réessayer ultérieurement.");
+				session.setAttribute(ATTR_ERREUR, "Un problème inattendu est survenu lors de la suppression du compte, veuillez réessayer ultérieurement.");
+				//this.getServletContext().getRequestDispatcher(VUE_COMPTE).forward(request, response);
+				response.sendRedirect(request.getContextPath());
 			}
 		}else {
-			request.setAttribute(ATTR_TYPE, "login");
-			this.getServletContext().getRequestDispatcher(VUE_CONNECTION).forward(request, response);
+			//request.setAttribute(ATTR_TYPE, "login");
+			//this.getServletContext().getRequestDispatcher(VUE_CONNECTION).forward(request, response);
+			response.sendRedirect(request.getContextPath() + VUE_CONNECTION);
 		}
 	}
 }

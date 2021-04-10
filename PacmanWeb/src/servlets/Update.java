@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import beans.User;
+import dao.CosmeticDao;
 import dao.DAOFactory;
 import dao.UserDao;
 import forms.UpdateForm;
 
 /**
- * Servlet implementation class UpdateProfil
+ * Servlet implementation class Update
  */
 @WebServlet("/update")
 @MultipartConfig(maxFileSize = 10 * 1024 * 1024, maxRequestSize = 5 * 10 * 1024 * 1024, fileSizeThreshold = 1024 * 1024)
@@ -27,6 +28,8 @@ public class Update extends HttpServlet {
 	public static final String ATTR_FORM = "form";
 	public static final String ATTR_USER = "user";
 	public static final String ATTR_SUCCES = "succes";
+	public static final String PARAM_PACMAN_SKIN = "pacman_skin";
+	public static final String PARAM_GHOST_SKIN = "ghost_skin";
     public static final String CONF_DAO_FACTORY = "daofactory";
 
     private UserDao userDao;
@@ -70,10 +73,11 @@ public class Update extends HttpServlet {
 			session.setAttribute(ATTR_USER, user);
 			
 			/* Stockage du message de succès */	
-			request.setAttribute(ATTR_SUCCES, "Mise à jour des informations réussie avec succès !");	
+			session.setAttribute(ATTR_SUCCES, "Mise à jour des informations réussie avec succès !");	
 			
 			/* Transmission de la paire d'objets request/response à notre JSP */
-			this.getServletContext().getRequestDispatcher(VUE_COMPTE).forward(request, response);
+			response.sendRedirect(request.getContextPath() + VUE_COMPTE);
+			//this.getServletContext().getRequestDispatcher(VUE_COMPTE).forward(request, response);
 		} else {
 			/* Stockage du formulaire dans l'objet request */
 			request.setAttribute(ATTR_FORM, updateForm);

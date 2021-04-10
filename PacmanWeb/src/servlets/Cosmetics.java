@@ -18,6 +18,7 @@ import beans.User;
 import dao.CosmeticDao;
 import dao.DAOFactory;
 import dao.PurchaseDao;
+import dao.UserDao;
 
 /**
  * Servlet implementation class Cosmetics
@@ -25,7 +26,7 @@ import dao.PurchaseDao;
 @WebServlet("/cosmetics")
 public class Cosmetics extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String VUE_COMPTE = "/WEB-INF/cosmetics.jsp";
+	public static final String VUE_COSMETICS = "/WEB-INF/cosmetics.jsp";
 	public static final String ATTR_CURRENTPAGE = "currentpage";
 	public static final String ATTR_COSMETICS = "cosmetics";
 	public static final String ATTR_PURCHASES = "purchases";
@@ -43,7 +44,7 @@ public class Cosmetics extends HttpServlet {
     }
     
     public void init() throws ServletException {
-        /* Récupération d'une instance de notre DAO User */
+        /* Récupération d'une instance de nos DAO */
         this.cosmeticDao = ((DAOFactory) getServletContext().getAttribute(CONF_DAO_FACTORY)).getCosmeticDao();
         this.purchaseDao = ((DAOFactory) getServletContext().getAttribute(CONF_DAO_FACTORY)).getPurchaseDao();
     }
@@ -52,25 +53,23 @@ public class Cosmetics extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Cosmetic> cosmetics = cosmeticDao.allCosmetics();
-		/*Map<Integer, Cosmetic> mapCosmetics = new HashMap<Integer, Cosmetic>();
-        for(Cosmetic cosmetic : cosmetics) {
-            mapCosmetics.put(cosmetic.getCosmetic_id(), cosmetic);
-        }*/
-        
-        HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if(user != null) {		
-	        List<Purchase> purchases = purchaseDao.find_by_user(user.getUser_id());
+		
+		List<Cosmetic> cosmetics = cosmeticDao.allCosmetics();
+        
+		if(user != null) {
+	        List<Purchase> purchases = purchaseDao.find_by_user(user.getUser_id(), "cosmetic");
 			Map<Integer, Purchase> mapPurchases = new HashMap<Integer, Purchase>();
 	        for(Purchase purchase : purchases) {
-	        	mapPurchases.put(purchase.getCosmetic_id(), purchase);
+	        	mapPurchases.put(purchase.getItem_id(), purchase);
 	        }
 			request.setAttribute(ATTR_PURCHASES, mapPurchases);
 		}
         
 		request.setAttribute(ATTR_COSMETICS, cosmetics);
 		request.setAttribute(ATTR_CURRENTPAGE, "cosmetics");
-		this.getServletContext().getRequestDispatcher(VUE_COMPTE).forward(request, response);
+			
+		this.getServletContext().getRequestDispatcher(VUE_COSMETICS).forward(request, response);
 	}
 }

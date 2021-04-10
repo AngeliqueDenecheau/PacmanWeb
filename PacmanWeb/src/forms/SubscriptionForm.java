@@ -1,5 +1,8 @@
 package forms;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -53,7 +56,7 @@ public class SubscriptionForm {
 			return null;
 		}
 		
-	    return user;
+	    return userDao.find_by_id(user.getUser_id());
 	}
 	
 	private static String getValeurParam(HttpServletRequest request, String param) {
@@ -97,11 +100,13 @@ public class SubscriptionForm {
 			validationPassword(password, confirm_password);
 		} catch (FormValidationException e) {
 			erreurs.add(e.getMessage());
+		} catch (NoSuchAlgorithmException e) {
+			erreurs.add(e.getMessage());
 		}
 		user.setPassword(password);
 	}
     
-    public void validationPassword(String password, String confirm_password) throws FormValidationException {
+    public void validationPassword(String password, String confirm_password) throws FormValidationException, NoSuchAlgorithmException {
     	if(password == null || password.isBlank() || password.length() < 8 || password.length() > 20) throw new FormValidationException("Votre mot de passe doit être compris entre 8 et 20 caractères !");
     	Pattern pattern = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(password);

@@ -12,14 +12,23 @@
 	<body>
 		<%@ include file="/WEB-INF/navbar.jsp" %>
 		<br>
+		
+		<%@ include file="/WEB-INF/alerts.jsp" %>
 
 		<c:choose>
 		    <c:when test="${empty requestScope.cosmetics}">
 		    	<div class="alert alert-danger" role="alert">Aucun cosmétique disponible.</div>
 		    </c:when>
 		    <c:otherwise>
+		    	<div class="col-2 offset-5">
+					<c:if test="${!empty sessionScope.user}">
+				    	<div class="alert alert-warning text-center" role="alert">
+							Votre argent : <c:out value="${sessionScope.user.money}"></c:out>
+						</div>
+			    	</c:if>
+			    </div>
+		    
 				<div class="row row-cols-1 row-cols-md-4 g-4 col-lg-10 offset-lg-1">
-			    	<c:if test="${!empty sessionScope.user}">Votre argent : <c:out value="${sessionScope.user.money}"></c:out><br><br></c:if>
 					<c:forEach items="${requestScope.cosmetics}" var="mapCosmetics" varStatus="boucle">
 			    	  <div class="col">
 			    	  	<c:choose>
@@ -49,7 +58,7 @@
 								    <li class="list-group-item"><c:out value="Prix : ${mapCosmetics.price}"></c:out></li>
 								  </ul>
 								  <div class="card-body">
-									<button type="button" class="btn btn-primary col-6 offset-3">Acheter</button>
+									<a href="buy?id_cosmetic=<c:out value="${mapCosmetics.cosmetic_id}"></c:out>"><button type="button" class="btn btn-primary col-6 offset-3">Acheter</button></a>
 							      </div>
 							    </div>
 					    	</c:otherwise>

@@ -6,23 +6,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <!-- <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="mazes">Labyrinthes</a>
+        <li class="nav-item">
+          <a class="<c:out value="${requestScope.currentpage == 'mazes' ? 'nav-link active' : 'nav-link'}" />" <c:if test="${requestScope.currentpage == 'mazes'}">aria-current="page"</c:if> href="mazes">Labyrinthes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="cosmetics">Cosmetiques</a>
+          <a class="<c:out value="${requestScope.currentpage == 'cosmetics' ? 'nav-link active' : 'nav-link'}" />" <c:if test="${requestScope.currentpage == 'cosmetics'}">aria-current="page"</c:if> href="cosmetics">Cosmetiques</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="ranking">Classement des joueurs</a>
-        </li> -->
-        <li class="nav-item">
-          <a class="<c:out value="${requestScope.currentpage == 'mazes' ? 'nav-link active' : 'navlink'}" />" <c:if test="${requestScope.currentpage == 'mazes'}">aria-current="page"</c:if> href="mazes">Labyrinthes</a>
-        </li>
-        <li class="nav-item">
-          <a class="<c:out value="${requestScope.currentpage == 'cosmetics' ? 'nav-link active' : 'navlink'}" />" <c:if test="${requestScope.currentpage == 'cosmetics'}">aria-current="page"</c:if> href="cosmetics">Cosmetiques</a>
-        </li>
-        <li class="nav-item">
-          <a class="<c:out value="${requestScope.currentpage == 'ranking' ? 'nav-link active' : 'navlink'}" />" <c:if test="${requestScope.currentpage == 'ranking'}">aria-current="page"</c:if> href="ranking">Classement des joueurs</a>
+          <a class="<c:out value="${requestScope.currentpage == 'ranking' ? 'nav-link active' : 'nav-link'}" />" <c:if test="${requestScope.currentpage == 'ranking'}">aria-current="page"</c:if> href="ranking">Classement des joueurs</a>
         </li>
       </ul>
       <c:choose>
@@ -36,10 +27,10 @@
 	    </c:when>
 	    <c:otherwise>
 		    <span class="navbar-nav nav-item">
-	        	<a class="nav-link" href="<c:url value="subscribe"/>">Inscription</a>
+	        	<a class="nav-link" href="<c:url value="connection?type=subscribe"/>">Inscription</a>
 	      	</span>
 	      	<span class="navbar-nav nav-item">
-	        	<a class="nav-link" href="<c:url value="login"/>">Connection</a>
+	        	<a class="nav-link" href="<c:url value="connection?type=login"/>">Connection</a>
 	      	</span>
 	    </c:otherwise>
 	  </c:choose>

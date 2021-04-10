@@ -15,6 +15,8 @@ public class User {
 	private Integer score;
 	private Integer parties_jouees;
 	private Integer parties_gagnees;
+	private Integer pacman_skin;
+	private Integer ghost_skin;
 	
 	public User() {}
 	
@@ -50,4 +52,10 @@ public class User {
 
 	public Integer getParties_gagnees() {return parties_gagnees;}
 	public void setParties_gagnees(Integer parties_gagnees) {this.parties_gagnees = parties_gagnees;}
+
+	public Integer getPacman_skin() {return pacman_skin;}
+	public void setPacman_skin(Integer pacman_skin) {this.pacman_skin = pacman_skin;}
+
+	public Integer getGhost_skin() {return ghost_skin;}
+	public void setGhost_skin(Integer ghost_skin) {this.ghost_skin = ghost_skin;}
 }

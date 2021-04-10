@@ -6,14 +6,17 @@ import beans.User;
 
 public interface UserDao {
 	void create(User user) throws DAOException;
-	
+
+    User find_by_id(int id) throws DAOException;
     User find_by_login(String login) throws DAOException;
     User find_by_email(String email) throws DAOException;
     User find_by_ids(String login, String password) throws DAOException;
     
     List<User> allUsers() throws DAOException;
+    List<User> allUsersOrderByScore() throws DAOException;
     
     void update(User user) throws DAOException;
+    void updatePassword(User user) throws DAOException;
     
     void delete(User user) throws DAOException;
 }

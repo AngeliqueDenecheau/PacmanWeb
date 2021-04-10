@@ -3,6 +3,7 @@ package filters;
 import java.io.IOException;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -19,9 +20,9 @@ import beans.User;
  * Servlet Filter implementation class Filter
  */
 @WebFilter(filterName = "RestrictionFilter", urlPatterns = "/WEB-INF/restricted/*", dispatcherTypes = {DispatcherType.FORWARD})
-public class RestrictionFilter implements javax.servlet.Filter {
+public class RestrictionFilter implements Filter {
 	public static final String ATTR_USER = "user";
-	public static final String VUE_CONNECTION = "/login";
+	public static final String VUE_CONNECTION = "/connection";
 
     /**
      * Default constructor. 

@@ -24,7 +24,7 @@ public class CosmeticDaoImpl implements CosmeticDao {
 	}
 	
 	@Override
-	public Cosmetic find(String cosmetic_id) throws DAOException {
+	public Cosmetic find(int cosmetic_id) throws DAOException {
 		Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
@@ -35,6 +35,7 @@ public class CosmeticDaoImpl implements CosmeticDao {
 	        connexion = daoFactory.getConnection();
 			preparedStatement = initRequest(connexion, SQL_SELECT_BY_ID, false, cosmetic_id);				
 	        resultSet = preparedStatement.executeQuery();
+			connexion.commit();
 	        
 	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 	        if (resultSet.next()) {cosmetic = map(resultSet);}
@@ -49,22 +50,23 @@ public class CosmeticDaoImpl implements CosmeticDao {
 
 	@Override
 	public List<Cosmetic> allCosmetics() throws DAOException {
-		Connection connection = null;
+		Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         List<Cosmetic> cosmetics = new ArrayList<Cosmetic>();
 
         try {
-            connection = daoFactory.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_SELECT);
+            connexion = daoFactory.getConnection();
+            preparedStatement = connexion.prepareStatement(SQL_SELECT);
             resultSet = preparedStatement.executeQuery();
+			connexion.commit();
             while (resultSet.next()) {
             	cosmetics.add(map(resultSet));
             }
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
-            close(resultSet, preparedStatement, connection);
+            close(resultSet, preparedStatement, connexion);
         }
 
         return cosmetics;

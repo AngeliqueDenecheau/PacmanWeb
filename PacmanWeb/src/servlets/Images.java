@@ -20,7 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 public class Images extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String ATTR_ERREUR = "erreur";
-	public static final String VUE_HOME = "/WEB-INF/home.jsp";
+	//public static final String VUE_HOME = "/WEB-INF/home.jsp";
+	public static final String VUE_HOME = "/home";
 	private static final int DEFAULT_BUFFER_SIZE = 10240; // 10 ko
 	public static final int TAILLE_TAMPON = 10240; // 10 ko
        
@@ -45,12 +46,12 @@ public class Images extends HttpServlet {
 	    /* Vérifie qu'un fichier a bien été fourni */
 	    if (fichierRequis == null || "/".equals(fichierRequis)) {
 	        /* Si non, alors on envoie une erreur 404, qui signifie que la ressource demandée n'existe pas */
-			request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
-			this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			//request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			request.getSession().setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			//this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			response.sendRedirect(request.getContextPath());
 			return;
 	    }
-	    
-	    System.out.println(chemin + fichierRequis);
 	    
 	    /* Décode le nom de fichier récupéré, susceptible de contenir des espaces et autres caractères spéciaux, et prépare l'objet File */
 	    fichierRequis = URLDecoder.decode(fichierRequis, "UTF-8");
@@ -59,8 +60,10 @@ public class Images extends HttpServlet {
 	    /* Vérifie que le fichier existe bien */
 	    if (!fichier.exists()) {
 	        /* Si non, alors on envoie une erreur 404, qui signifie que la ressource demandée n'existe pas */
-			request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
-			this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			//request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+	    	request.getSession().setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			//this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			response.sendRedirect(request.getContextPath() + VUE_HOME);
 			return;
 	    }
 	    

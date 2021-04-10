@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 public class Download extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String ATTR_ERREUR = "erreur";
-	public static final String VUE_HOME = "/WEB-INF/home.jsp";
+    private static final String ATT_DOWNLOAD_COUNTER = "downloadcounter";
+	//public static final String VUE_HOME = "/WEB-INF/home.jsp";
+	public static final String VUE_HOME = "/home";
 	private static final int DEFAULT_BUFFER_SIZE = 10240; // 10 ko
 	public static final int TAILLE_TAMPON = 10240; // 10 ko
 	
@@ -45,8 +48,10 @@ public class Download extends HttpServlet {
 	    /* Vérifie qu'un fichier a bien été fourni */
 	    if (fichierRequis == null || "/".equals(fichierRequis)) {
 	        /* Si non, alors on envoie une erreur 404, qui signifie que la ressource demandée n'existe pas */
-			request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
-			this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			//request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			request.getSession().setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			//this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			response.sendRedirect(request.getContextPath() + VUE_HOME);
 			return;
 	    }
 	    
@@ -57,9 +62,16 @@ public class Download extends HttpServlet {
 	    /* Vérifie que le fichier existe bien */
 	    if (!fichier.exists()) {
 	        /* Si non, alors on envoie une erreur 404, qui signifie que la ressource demandée n'existe pas */
-			request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
-			this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			//request.setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			request.getSession().setAttribute(ATTR_ERREUR, "La ressource demandée n'est pas disponible.");
+			//this.getServletContext().getRequestDispatcher(VUE_HOME).forward(request, response);
+			response.sendRedirect(request.getContextPath() + VUE_HOME);
 			return;
+	    }
+	    
+	    if(fichierRequis.equals("/Client.jar")) {
+	    	int counter = (int) getServletContext().getAttribute(ATT_DOWNLOAD_COUNTER);
+	    	getServletContext().setAttribute(ATT_DOWNLOAD_COUNTER, ++counter);
 	    }
 	    
 	    /* Récupère le type du fichier */

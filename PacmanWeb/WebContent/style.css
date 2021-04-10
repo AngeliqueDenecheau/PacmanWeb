@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+.scrollcolors span {
+  position: relative;
+  top: 7px;
+  bottom: 7px;
+  left: 7px;
+  right: 7px;
+  width: 306px;
+  height: 76px;
+  display:inline-block;
+  border-radius: 3px;
+  background-color: white;
+  text-align: center;
+  line-height: 50px;
+  font-size: 1.4rem;
+  padding: 0.6em;
+}
+.scrollcolors {
+  position: relative;
+  width: 350px;
+  height: 90px;
+  margin: 10px;
+  border-radius: 6px;
+  background-color: yellow;
+  background-image: repeating-linear-gradient(-45deg, #d19f95, #eed54b 1rem, #3bc080 2rem, #16b9fd 3rem, #a969e1 4rem, #d19f95 5rem);
+  background-position: 0% 0%;
+  background-size: 1000%;
+  background-repeat: repeat;
+  animation-name: colors;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-play-state: running;
+  animation-timing-function: linear;
+}
+
+@keyframes colors {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 18.9% 18.9%;
+  }
+}

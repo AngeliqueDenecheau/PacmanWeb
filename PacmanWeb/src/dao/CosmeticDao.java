@@ -6,7 +6,7 @@ import beans.Cosmetic;
 
 public interface CosmeticDao {
 	
-	Cosmetic find(String cosmetic_id) throws DAOException;
+	Cosmetic find(int cosmetic_id) throws DAOException;
     
     List<Cosmetic> allCosmetics() throws DAOException;
 }

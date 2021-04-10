@@ -1,0 +1,93 @@
+======== Créer la base de données ========
+CREATE DATABASE pacmanweb DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+======== Créer les tables ========
+CREATE TABLE pacmanweb.Users (
+ user_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ token VARCHAR(60) UNIQUE,
+ created DATETIME NOT NULL,
+ login VARCHAR(60) NOT NULL UNIQUE,
+ email VARCHAR(60) NOT NULL UNIQUE,
+ password VARCHAR(32) NOT NULL,
+ image VARCHAR(200) UNIQUE,
+ money INT(11) NOT NULL DEFAULT '0',
+ score INT(11) NOT NULL DEFAULT '0',
+ parties_jouees INT(11) NOT NULL DEFAULT '0',
+ parties_gagnees INT(11) NOT NULL DEFAULT '0',
+ pacman_skin INT(11) NOT NULL DEFAULT '0',
+ ghost_skin INT(11) NOT NULL DEFAULT '0'
+) ENGINE = INNODB;
+
+INSERT INTO Users (created, login, email, password, money, score, parties_jouees, parties_gagnees) VALUES (NOW(), 'angelique', 'angelique@email.fr', MD5('password'), 10000, 8650, 3, 2);
+INSERT INTO Users (created, login, email, password, money, score, parties_jouees, parties_gagnees) VALUES (NOW(), 'baptiste', 'baptiste@email.fr', MD5('password'), 560, 120, 13, 1);
+ 
+
+CREATE TABLE pacmanweb.Mazes (
+ maze_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ created DATETIME NOT NULL,
+ user_id INT(11),
+ name VARCHAR(60) NOT NULL,
+ filename VARCHAR(60) NOT NULL UNIQUE,
+ price int(11) NOT NULL,
+ CONSTRAINT fk_user_id
+    FOREIGN KEY (user_id)
+    REFERENCES Users(user_id)
+    ON DELETE SET NULL
+) ENGINE = INNODB;
+
+INSERT INTO Mazes (created, user_id, name, filename, price) VALUES (NOW(), '1', 'Medium Classic', 'mediumclassic.png', '120');
+INSERT INTO Mazes (created, user_id, name, filename, price) VALUES (NOW(), '1', 'Original Classic', 'originalclassic.png', '12000');
+
+
+CREATE TABLE pacmanweb.Games (
+ game_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ created DATETIME NOT NULL,
+ gamemode VARCHAR(60) NOT NULL,
+ player_one INT(11),
+ player_two INT(11),
+ winner INT(11),
+ maze_id INT(11),
+ CONSTRAINT fk_maze_id
+    FOREIGN KEY (maze_id)
+    REFERENCES Mazes(maze_id)
+    ON DELETE SET NULL,
+ CONSTRAINT p1_user_id
+    FOREIGN KEY (player_one)
+    REFERENCES Users(user_id)
+    ON DELETE SET NULL,
+ CONSTRAINT p2_user_id
+    FOREIGN KEY (player_two)
+    REFERENCES Users(user_id)
+    ON DELETE SET NULL
+) ENGINE = INNODB;
+
+INSERT INTO Games (created, gamemode, player_one, player_two, winner, maze_id) VALUES (NOW(), 'singleplayer', '1', null, '1', '1');
+INSERT INTO Games (created, gamemode, player_one, player_two, winner, maze_id) VALUES (NOW(), 'multiplayer', '1', '2', '1', '2');
+INSERT INTO Games (created, gamemode, player_one, player_two, winner, maze_id) VALUES (NOW(), 'singleplayer', '1', null, null, '1');
+
+
+CREATE TABLE pacmanweb.Cosmetics (
+ cosmetic_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(60) NOT NULL,
+ type VARCHAR(60) NOT NULL,
+ price int(11) NOT NULL,
+ image_filename VARCHAR(60) NOT NULL UNIQUE
+) ENGINE = INNODB;
+
+INSERT INTO Cosmetics (name, type, price, image_filename) VALUES ('Pinky', 'ghost', '250', 'pinky.png');
+INSERT INTO Cosmetics (name, type, price, image_filename) VALUES ('Inky', 'ghost', '300', 'inky.png');
+INSERT INTO Cosmetics (name, type, price, image_filename) VALUES ('Clyde', 'ghost', '500', 'clyde.png');
+INSERT INTO Cosmetics (name, type, price, image_filename) VALUES ('Lady Pacman', 'pacman', '1500', 'lady_pacman.png');
+
+
+CREATE TABLE pacmanweb.Purchases (
+ purchase_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ created DATETIME NOT NULL,
+ user_id INT(11),
+ type VARCHAR(60) NOT NULL,
+ item_id INT(11),
+ CONSTRAINT fk_purchase_user_id
+    FOREIGN KEY (user_id)
+    REFERENCES Users(user_id)
+    ON DELETE SET NULL
+) ENGINE = INNODB;
